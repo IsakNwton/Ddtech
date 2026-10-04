@@ -330,7 +330,7 @@ export function PcBuilder({ parts, presets }: { parts: BuilderPart[]; presets: P
                   </Button>
                 </div>
               )}
-              <ul role="radiogroup" aria-labelledby="step-title" className="mt-4 space-y-2.5" key={active}>
+              <div role="radiogroup" aria-labelledby="step-title" className="mt-4 space-y-2.5" key={active}>
                 {options.visible.map(({ part, check }, i) => (
                   <OptionCard
                     key={part.id}
@@ -342,7 +342,7 @@ export function PcBuilder({ parts, presets }: { parts: BuilderPart[]; presets: P
                     delay={Math.min(i, 8) * 25}
                   />
                 ))}
-              </ul>
+              </div>
               {options.visible.length === 0 && (
                 <p className="mt-4 rounded-lg border border-line bg-surface p-6 text-center text-sm text-fg-muted">
                   No hay opciones que coincidan. {options.hidden > 0 && "Prueba mostrando también las incompatibles."}

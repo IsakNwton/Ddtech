@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: PageProps<"/componentes/[cate
   const { categoria } = await params;
   const c = getCategoryBySlug(categoria);
   if (!c) return {};
-  return pageMetadata({ title: c.name, description: c.description, path: `/componentes/${c.slug}`, image: `/art/${c.art}.svg` });
+  return pageMetadata({ title: c.name, description: c.description, path: `/componentes/${c.slug}` });
 }
 
 /** Accesos rápidos por categoría: los atajos más usados, a un toque */

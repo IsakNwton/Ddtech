@@ -30,7 +30,6 @@ export async function generateMetadata({ params }: PageProps<"/producto/[slug]">
     title: `${p.brand} ${p.name}`,
     description: `${p.description.slice(0, 140)}… Precio demostrativo. ${DISCLAIMER}`,
     path: `/producto/${p.slug}`,
-    image: productImage(p.slug),
   });
 }
 

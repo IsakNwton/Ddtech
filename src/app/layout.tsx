@@ -24,7 +24,9 @@ export const metadata: Metadata = {
     type: "website",
     locale: "es_MX",
     siteName: "DDTech · Concepto de rediseño",
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "DDTech — concepto de rediseño" }],
   },
+  twitter: { card: "summary_large_image", images: ["/og.png"] },
   formatDetection: { telephone: false },
 };
 

@@ -58,6 +58,8 @@ export function scoreDoc(doc: SearchDoc, q: string, toks: string[]): number {
   if (name.includes(nq)) score += 20;
   if (doc.model && normalize(doc.model) === nq) score += 25;
   if (doc.model && normalize(doc.model).startsWith(nq)) score += 10;
+  // "5070" debe priorizar la RTX 5070 sobre la 5070 Ti
+  if (doc.model && normalize(doc.model).split(" ").at(-1) === toks.at(-1)) score += 12;
   if (doc.category === "pc") score -= 6;
   if (doc.stock <= 0) score -= 4;
   return score + Math.min(6, doc.sold / 150);

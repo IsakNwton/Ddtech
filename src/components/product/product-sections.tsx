@@ -23,7 +23,7 @@ export function DescriptionSection({ description, features }: { description: str
   return (
     <section id="descripcion" aria-labelledby="descripcion-title" className="scroll-mt-36">
       <SectionTitle id="descripcion">Descripción</SectionTitle>
-      <div className="grid gap-8 lg:grid-cols-[1.2fr_1fr]">
+      <div className="grid gap-8 lg:grid-cols-[1.2fr_1fr] [&>*]:min-w-0">
         <p className="max-w-prose text-pretty leading-relaxed text-fg-muted">{description}</p>
         {features.length > 0 && (
           <div>
@@ -51,7 +51,7 @@ export function SpecsSection({ specs }: { specs: SpecGroup[] }) {
       <SectionTitle id="especificaciones" aside={<span className="text-xs text-fg-subtle">Datos de referencia (demo). Verifica con el fabricante.</span>}>
         Especificaciones
       </SectionTitle>
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 md:grid-cols-2 [&>*]:min-w-0">
         {specs.map((g) => (
           <div key={g.title} className="overflow-hidden rounded-lg border border-line">
             <h3 className="border-b border-line bg-surface-2 px-4 py-2.5 font-mono text-2xs font-semibold uppercase tracking-[0.12em] text-fg-muted">
@@ -92,7 +92,7 @@ export function CompatSection({ compat, slug }: { compat: ProductCompat | null; 
           Este producto no requiere verificación de compatibilidad con otros componentes.
         </p>
       ) : (
-        <div className="grid gap-4 lg:grid-cols-[320px_1fr]">
+        <div className="grid gap-4 lg:grid-cols-[320px_1fr] [&>*]:min-w-0">
           <div className="rounded-lg border border-line bg-surface p-5">
             <h3 className="text-sm font-semibold text-fg">Lo que necesitas saber</h3>
             <dl className="mt-3 space-y-3">
@@ -105,7 +105,7 @@ export function CompatSection({ compat, slug }: { compat: ProductCompat | null; 
             </dl>
           </div>
           {compat.groups.length > 0 && (
-            <div className="grid gap-4 md:grid-cols-2">
+            <div className="grid gap-4 md:grid-cols-2 [&>*]:min-w-0">
               {compat.groups.map((g) => (
                 <div key={g.title} className="rounded-lg border border-line bg-surface p-5">
                   <div className="flex items-start justify-between gap-3">
@@ -146,7 +146,7 @@ export function ReviewsSection({ rating, count, distribution, reviews }: { ratin
       <SectionTitle id="opiniones" aside={<DemoAction message="En producción se abriría el formulario de reseñas verificadas.">Escribir opinión</DemoAction>}>
         Opiniones
       </SectionTitle>
-      <div className="grid gap-6 lg:grid-cols-[320px_1fr]">
+      <div className="grid gap-6 lg:grid-cols-[320px_1fr] [&>*]:min-w-0">
         <div className="rounded-lg border border-line bg-surface p-5">
           <div className="flex items-end gap-3">
             <p className="tabular text-5xl font-semibold tracking-[-0.04em] text-fg">{rating.toFixed(1)}</p>

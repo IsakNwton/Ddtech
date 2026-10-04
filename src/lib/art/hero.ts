@@ -11,7 +11,7 @@ export const HERO_HOTSPOTS = [
   { id: "ram", label: "Memoria RAM", x: 412, y: 200, href: "/componentes/memoria-ram" },
   { id: "gpu", label: "Tarjeta gráfica", x: 300, y: 331, href: "/componentes/gpu" },
   { id: "cooling", label: "Refrigeración", x: 300, y: 70, href: "/componentes/enfriamiento" },
-  { id: "psu", label: "Fuente de poder", x: 214, y: 520, href: "/componentes/fuentes-de-poder" },
+  { id: "psu", label: "Fuente de poder", x: 420, y: 470, href: "/componentes/fuentes-de-poder" },
   { id: "case", label: "Gabinete", x: 124, y: 330, href: "/componentes/gabinetes" },
 ] as const;
 

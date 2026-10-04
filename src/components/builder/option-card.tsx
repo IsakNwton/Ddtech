@@ -30,7 +30,7 @@ export function OptionCard({
   const blocked = check.level === "error" || out;
   const pct = discountPercent(part.price, part.compareAt);
   return (
-    <li className="animate-fade-up" style={{ animationDelay: `${delay}ms` }}>
+    <div className="animate-fade-up" style={{ animationDelay: `${delay}ms` }}>
       <div
         className={cn(
           "group relative flex gap-3 rounded-lg border bg-surface p-3 transition-[border-color,background-color,box-shadow] duration-150 sm:gap-4 sm:p-4",
@@ -108,6 +108,6 @@ export function OptionCard({
           <ExternalLink className="size-3.5" />
         </Link>
       </div>
-    </li>
+    </div>
   );
 }

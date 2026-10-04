@@ -41,10 +41,10 @@ export function ProductRail({
         <SectionHeader
           {...header}
           aside={
-            <>
+            <div className="flex items-center gap-3">
               {aside}
               {arrows}
-            </>
+            </div>
           }
         />
       )}

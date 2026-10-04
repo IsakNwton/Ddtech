@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 export const SITE_NAME = "DDTech · Concepto de rediseño";
+/** Imagen social (PNG): las redes no admiten SVG */
+export const OG_IMAGE = "/og.png";
 export const DISCLAIMER = "Concepto de rediseño independiente. No afiliado oficialmente con DDTech.";
 
 export function pageMetadata({
@@ -13,6 +15,7 @@ export function pageMetadata({
   title: string;
   description: string;
   path: string;
+  /** Solo imágenes rasterizadas (PNG/JPG) */
   image?: string;
 }): Metadata {
   return {
@@ -26,8 +29,8 @@ export function pageMetadata({
       siteName: SITE_NAME,
       locale: "es_MX",
       type: "website",
-      ...(image ? { images: [{ url: image, width: 480, height: 360 }] } : {}),
+      images: [{ url: image ?? OG_IMAGE, width: 1200, height: 630, alt: "DDTech — concepto de rediseño" }],
     },
-    twitter: { card: "summary_large_image", title, description },
+    twitter: { card: "summary_large_image", title, description, images: [image ?? OG_IMAGE] },
   };
 }

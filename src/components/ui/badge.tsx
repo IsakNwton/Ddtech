@@ -12,7 +12,7 @@ export function Badge({ tone = "neutral", className, children }: { tone?: Tone; 
         {
           neutral: "bg-surface-4 text-fg-muted",
           brand: "bg-brand-soft text-brand-text ring-1 ring-inset ring-brand-line",
-          deal: "bg-deal text-white",
+          deal: "bg-deal-strong text-white",
           success: "bg-success-soft text-success",
           warning: "bg-warning-soft text-warning",
           danger: "bg-danger-soft text-danger",

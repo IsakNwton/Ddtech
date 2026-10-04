@@ -21,7 +21,7 @@ export function DealsSection({ products }: { products: ProductSummary[] }) {
           href: "/ofertas",
           hrefLabel: "Ver ofertas",
         }}
-        aside={<Countdown />}
+        aside={<Countdown key="countdown" />}
       />
     </section>
   );
