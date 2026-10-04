@@ -52,7 +52,7 @@ export function Sheet({
         if (e.target === ref.current) onClose();
       }}
       className={cn(
-        "m-0 max-h-none max-w-none bg-transparent p-0 text-fg backdrop:bg-black/60 backdrop:backdrop-blur-[2px] open:backdrop:animate-fade-in",
+        "m-0 max-h-none max-w-none overflow-clip bg-transparent p-0 text-fg backdrop:bg-black/60 backdrop:backdrop-blur-[2px] open:backdrop:animate-fade-in",
         side === "right" && "ml-auto h-dvh w-full sm:w-[440px]",
         side === "left" && "mr-auto h-dvh w-[88vw] max-w-[380px]",
         side === "bottom" && "mt-auto w-full",
@@ -85,7 +85,7 @@ export function Sheet({
               </button>
             </div>
           )}
-          <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">{children}</div>
+          <div className="min-h-0 flex-auto overflow-y-auto overscroll-contain">{children}</div>
           {footer && <div className="shrink-0 border-t border-line bg-surface px-5 py-4 safe-bottom">{footer}</div>}
         </div>
       )}

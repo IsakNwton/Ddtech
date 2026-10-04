@@ -36,7 +36,7 @@ export function MobileSearch() {
         e.preventDefault();
         setOpen(false);
       }}
-      className="m-0 h-dvh max-h-none w-full max-w-none bg-bg p-0 text-fg backdrop:bg-black/60"
+      className="m-0 h-dvh max-h-none w-full max-w-none overflow-clip bg-bg p-0 text-fg backdrop:bg-black/60"
     >
       {open && (
         <div className="flex h-full animate-fade-in flex-col">

@@ -1,7 +1,17 @@
 import { formatPrice } from "@/lib/format";
 import { DemoTag } from "@/components/ui/placeholder";
 
-export function CartTotals({ subtotal, savings, shipping }: { subtotal: number; savings: number; shipping?: number | null }) {
+export function CartTotals({
+  subtotal,
+  savings,
+  shipping,
+  shippingNote = "Se calcula en el checkout",
+}: {
+  subtotal: number;
+  savings: number;
+  shipping?: number | null;
+  shippingNote?: string;
+}) {
   const total = subtotal + (shipping ?? 0);
   return (
     <dl className="space-y-2 text-sm">
@@ -17,7 +27,7 @@ export function CartTotals({ subtotal, savings, shipping }: { subtotal: number; 
       )}
       <div className="flex justify-between text-fg-muted">
         <dt>Envío</dt>
-        <dd className="text-right">{shipping === undefined || shipping === null ? <span className="text-fg-subtle">Se calcula en el checkout</span> : shipping === 0 ? <span className="text-success">Gratis</span> : <span className="tabular text-fg">{formatPrice(shipping)}</span>}</dd>
+        <dd className="text-right">{shipping === undefined || shipping === null ? <span className="text-fg-subtle">{shippingNote}</span> : shipping === 0 ? <span className="text-success">Gratis</span> : <span className="tabular text-fg">{formatPrice(shipping)}</span>}</dd>
       </div>
       <div className="flex items-baseline justify-between border-t border-line pt-3">
         <dt className="font-semibold text-fg">Total</dt>

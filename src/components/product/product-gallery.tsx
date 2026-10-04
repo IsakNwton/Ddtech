@@ -128,7 +128,7 @@ export function ProductGallery({ images, name, badges }: { images: GalleryImage[
           setLightbox(false);
         }}
         aria-label={`Galería de ${name}`}
-        className="m-auto h-dvh max-h-none w-full max-w-none bg-bg/96 p-0 text-fg backdrop:bg-black/80"
+        className="m-auto h-dvh max-h-none w-full max-w-none overflow-clip bg-bg/96 p-0 text-fg backdrop:bg-black/80"
       >
         {lightbox && (
           <div className="flex h-full animate-fade-in flex-col">

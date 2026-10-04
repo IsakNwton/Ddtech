@@ -64,7 +64,7 @@ function base(category: CategoryId, input: BaseInput, defaults: { art: ArtSpec["
   const rnd = seeded(slug);
   const rating = input.rating ?? Math.round((4.2 + rnd() * 0.75) * 10) / 10;
   const reviews = input.reviews ?? Math.floor(8 + rnd() * 420);
-  const stock = input.stock ?? Math.floor(rnd() * 36);
+  const stock = input.stock ?? 6 + Math.floor(rnd() * 30);
   const sold = input.sold ?? Math.floor(20 + rnd() * 900);
   const tags = new Set(input.tags ?? []);
   if (input.compareAt && input.compareAt > input.price) tags.add("oferta");
