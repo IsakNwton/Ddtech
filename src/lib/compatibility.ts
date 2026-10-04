@@ -305,11 +305,18 @@ export interface CandidateCheck {
   reasons: string[];
 }
 
-/** Evalúa cómo quedaría la build si el candidato ocupa su ranura. */
+/**
+ * Evalúa cómo quedaría la build si el candidato ocupa su ranura.
+ * Se atribuyen al candidato los problemas que lo involucran directamente y los que
+ * aparecen solo al agregarlo (p. ej. una GPU que deja corta a la fuente elegida).
+ */
 export function checkCandidate(build: ResolvedBuild, slot: BuildSlot, candidate: BuilderPart): CandidateCheck {
+  const base: ResolvedBuild = { ...build };
+  delete base[slot];
+  const baseIds = new Set(evaluateBuild(base).map((i) => i.id));
   const next: ResolvedBuild = { ...build, [slot]: candidate };
   const issues = evaluateBuild(next).filter(
-    (i) => i.slots.includes(slot) && i.id !== "no-cooler" && i.id !== "no-gpu",
+    (i) => (i.slots.includes(slot) || !baseIds.has(i.id)) && i.id !== "no-cooler" && i.id !== "no-gpu",
   );
   return { level: overallLevel(issues), reasons: issues.map((i) => i.title + ". " + i.detail) };
 }

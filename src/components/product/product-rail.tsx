@@ -1,29 +1,53 @@
 "use client";
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useRef } from "react";
+import { useRef, type ComponentProps, type ReactNode } from "react";
 import type { ProductSummary } from "@/lib/types";
 import { IconButton } from "@/components/ui/button";
+import { SectionHeader } from "@/components/ui/section-header";
 import { ProductCard } from "./product-card";
 
 /** Carrusel horizontal con scroll-snap nativo: táctil en móvil, con flechas en desktop */
-export function ProductRail({ products, label }: { products: ProductSummary[]; label: string }) {
+export function ProductRail({
+  products,
+  label,
+  header,
+  aside,
+}: {
+  products: ProductSummary[];
+  label: string;
+  header?: Omit<ComponentProps<typeof SectionHeader>, "aside">;
+  aside?: ReactNode;
+}) {
   const ref = useRef<HTMLUListElement>(null);
   const scroll = (dir: 1 | -1) => {
     const el = ref.current;
     if (!el) return;
     el.scrollBy({ left: dir * el.clientWidth * 0.85, behavior: "smooth" });
   };
+  const arrows = (
+    <div className="hidden gap-1.5 md:flex">
+      <IconButton label="Anterior" variant="surface" onClick={() => scroll(-1)}>
+        <ChevronLeft className="size-4" />
+      </IconButton>
+      <IconButton label="Siguiente" variant="surface" onClick={() => scroll(1)}>
+        <ChevronRight className="size-4" />
+      </IconButton>
+    </div>
+  );
   return (
-    <div className="relative">
-      <div className="absolute -top-[4.25rem] right-0 hidden gap-1.5 md:flex">
-        <IconButton label="Anterior" variant="surface" onClick={() => scroll(-1)}>
-          <ChevronLeft className="size-4" />
-        </IconButton>
-        <IconButton label="Siguiente" variant="surface" onClick={() => scroll(1)}>
-          <ChevronRight className="size-4" />
-        </IconButton>
-      </div>
+    <div>
+      {header && (
+        <SectionHeader
+          {...header}
+          aside={
+            <>
+              {aside}
+              {arrows}
+            </>
+          }
+        />
+      )}
       <ul
         ref={ref}
         aria-label={label}

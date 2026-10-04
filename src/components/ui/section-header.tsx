@@ -35,7 +35,6 @@ export function SectionHeader({
       </div>
       {(href || aside) && (
         <div className="flex items-center gap-3">
-          {aside}
           {href && (
             <Link
               href={href}
@@ -45,6 +44,7 @@ export function SectionHeader({
               <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
             </Link>
           )}
+          {aside}
         </div>
       )}
     </div>
