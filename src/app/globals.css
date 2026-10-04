@@ -1,0 +1,233 @@
+@import "tailwindcss";
+
+/*
+ * DDTech — Concept Design System
+ * ---------------------------------------------------------------
+ * Todos los colores, radios, sombras y tiempos viven aquí como tokens.
+ * El acento (--color-brand*) es PROVISIONAL: reemplázalo por el color
+ * corporativo oficial de DDTech y toda la interfaz se actualiza.
+ */
+
+@theme {
+  /* Superficies (de más profundo a más elevado) */
+  --color-bg: #08090b;
+  --color-surface: #0e1014;
+  --color-surface-2: #13161b;
+  --color-surface-3: #1a1e24;
+  --color-surface-4: #222730;
+
+  /* Líneas */
+  --color-line: #1f232a;
+  --color-line-strong: #2c313a;
+
+  /* Texto */
+  --color-fg: #f3f5f8;
+  --color-fg-muted: #a7aeb9;
+  --color-fg-subtle: #808894;
+
+  /* Acento de marca (provisional) */
+  --color-brand: #2f5ff0;
+  --color-brand-hover: #2552d9;
+  --color-brand-text: #84a5ff;
+  --color-brand-soft: rgb(47 95 240 / 0.14);
+  --color-brand-line: rgb(84 128 255 / 0.4);
+
+  /* Semánticos */
+  --color-success: #34d399;
+  --color-success-soft: rgb(52 211 153 / 0.12);
+  --color-warning: #fbbf24;
+  --color-warning-soft: rgb(251 191 36 / 0.12);
+  --color-danger: #f87171;
+  --color-danger-soft: rgb(248 113 113 / 0.12);
+  --color-deal: #ff6b57;
+  --color-deal-soft: rgb(255 107 87 / 0.14);
+
+  /* Tipografía */
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+
+  --text-2xs: 0.6875rem;
+  --text-2xs--line-height: 1rem;
+
+  /* Radios */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+
+  /* Sombras */
+  --shadow-card: 0 1px 0 0 rgb(255 255 255 / 0.03) inset, 0 12px 32px -18px rgb(0 0 0 / 0.7);
+  --shadow-pop: 0 1px 0 0 rgb(255 255 255 / 0.04) inset, 0 24px 60px -20px rgb(0 0 0 / 0.85), 0 0 0 1px rgb(255 255 255 / 0.04);
+  --shadow-glow: 0 0 0 1px var(--color-brand-line), 0 8px 30px -10px rgb(47 95 240 / 0.55);
+
+  /* Movimiento */
+  --ease-out-soft: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+
+  --animate-fade-in: fade-in 200ms var(--ease-out-soft) both;
+  --animate-fade-up: fade-up 260ms var(--ease-out-soft) both;
+  --animate-scale-in: scale-in 180ms var(--ease-out-soft) both;
+  --animate-slide-in-right: slide-in-right 280ms var(--ease-out-soft) both;
+  --animate-slide-in-left: slide-in-left 280ms var(--ease-out-soft) both;
+  --animate-slide-in-up: slide-in-up 280ms var(--ease-out-soft) both;
+  --animate-shimmer: shimmer 1.4s linear infinite;
+  --animate-bump: bump 300ms var(--ease-spring);
+  --animate-check: check-pop 260ms var(--ease-spring) both;
+
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes scale-in {
+    from { opacity: 0; transform: scale(0.97) translateY(-4px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  @keyframes slide-in-right {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+  }
+  @keyframes slide-in-left {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(0); }
+  }
+  @keyframes slide-in-up {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+  @keyframes shimmer {
+    from { background-position: -200% 0; }
+    to { background-position: 200% 0; }
+  }
+  @keyframes bump {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.35); }
+    100% { transform: scale(1); }
+  }
+  @keyframes check-pop {
+    from { opacity: 0; transform: scale(0.6); }
+    to { opacity: 1; transform: scale(1); }
+  }
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 9rem;
+  }
+
+  body {
+    background: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background: var(--color-brand);
+    color: white;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand-text);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]) {
+    cursor: pointer;
+  }
+
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+
+  input[type="search"]::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+  }
+}
+
+@layer components {
+  .container-page {
+    width: 100%;
+    max-width: 1440px;
+    margin-inline: auto;
+    padding-inline: 1rem;
+  }
+  @media (min-width: 640px) {
+    .container-page { padding-inline: 1.5rem; }
+  }
+  @media (min-width: 1280px) {
+    .container-page { padding-inline: 2rem; }
+  }
+
+  /* Superficie de tarjeta estándar */
+  .surface {
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+  }
+
+  /* Fondo de escenario de producto: luz suave, sin gradientes estridentes */
+  .stage {
+    background:
+      radial-gradient(120% 80% at 50% 0%, rgb(255 255 255 / 0.045), transparent 60%),
+      linear-gradient(180deg, var(--color-surface-2), var(--color-surface));
+  }
+
+  .skeleton {
+    background: linear-gradient(90deg, var(--color-surface-2) 25%, var(--color-surface-3) 37%, var(--color-surface-2) 63%);
+    background-size: 400% 100%;
+    animation: var(--animate-shimmer);
+    border-radius: var(--radius-sm);
+  }
+
+  .grid-backdrop {
+    background-image:
+      linear-gradient(to right, rgb(255 255 255 / 0.035) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.035) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse 70% 70% at 60% 40%, black 30%, transparent 75%);
+  }
+
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}

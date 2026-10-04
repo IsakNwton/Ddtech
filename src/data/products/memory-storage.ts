@@ -1,0 +1,117 @@
+import { ram, storage } from "./factory";
+
+/* Memoria y almacenamiento — datos aproximados, precios DEMO. */
+export const memory = [
+  ram({
+    brand: "Kingston",
+    name: "FURY Beast 32GB (2x16GB) DDR5-6000 CL30",
+    price: 2099,
+    compareAt: 2299,
+    tags: ["top"],
+    art: { tone: "black", accent: "#ef4444", label: "FURY", variant: 0 },
+    tech: { memory: "DDR5", capacityGb: 32, modules: 2, speed: 6000, latency: 30, rgb: false },
+  }),
+  ram({
+    brand: "Corsair",
+    name: "Vengeance RGB 32GB (2x16GB) DDR5-6000 CL36",
+    price: 2299,
+    art: { tone: "black", accent: "#fbbf24", label: "VENGEANCE", rgb: true, variant: 1 },
+    tech: { memory: "DDR5", capacityGb: 32, modules: 2, speed: 6000, latency: 36, rgb: true },
+  }),
+  ram({
+    brand: "G.Skill",
+    name: "Trident Z5 Neo RGB 64GB (2x32GB) DDR5-6000 CL30",
+    price: 4299,
+    tags: ["envio-gratis"],
+    art: { tone: "silver", accent: "#ef4444", label: "TRIDENT Z5", rgb: true, variant: 2 },
+    tech: { memory: "DDR5", capacityGb: 64, modules: 2, speed: 6000, latency: 30, rgb: true },
+  }),
+  ram({
+    brand: "TeamGroup",
+    name: "T-Force Delta RGB 32GB (2x16GB) DDR5-6400 CL32",
+    price: 2399,
+    tags: ["nuevo"],
+    art: { tone: "white", accent: "#a78bfa", label: "T-FORCE", rgb: true, variant: 3 },
+    tech: { memory: "DDR5", capacityGb: 32, modules: 2, speed: 6400, latency: 32, rgb: true },
+  }),
+  ram({
+    brand: "Kingston",
+    name: "FURY Beast 16GB (2x8GB) DDR5-5600 CL36",
+    price: 1199,
+    art: { tone: "black", accent: "#ef4444", label: "FURY", variant: 0 },
+    tech: { memory: "DDR5", capacityGb: 16, modules: 2, speed: 5600, latency: 36, rgb: false },
+  }),
+  ram({
+    brand: "Kingston",
+    name: "FURY Beast 16GB (2x8GB) DDR4-3200 CL16",
+    price: 899,
+    art: { tone: "black", accent: "#ef4444", label: "FURY", variant: 4 },
+    tech: { memory: "DDR4", capacityGb: 16, modules: 2, speed: 3200, latency: 16, rgb: false },
+  }),
+  ram({
+    brand: "Corsair",
+    name: "Vengeance LPX 32GB (2x16GB) DDR4-3600 CL18",
+    price: 1499,
+    compareAt: 1649,
+    art: { tone: "black", accent: "#fbbf24", label: "VENGEANCE LPX", variant: 5 },
+    tech: { memory: "DDR4", capacityGb: 32, modules: 2, speed: 3600, latency: 18, rgb: false },
+  }),
+];
+
+export const drives = [
+  storage({
+    brand: "Samsung",
+    name: "990 PRO 1TB NVMe M.2",
+    price: 1999,
+    compareAt: 2299,
+    tags: ["top"],
+    art: { tone: "black", accent: "#f97316", label: "990 PRO", sublabel: "1TB" },
+    tech: { interface: "NVMe Gen4", formFactor: "M.2 2280", capacityGb: 1000, readMb: 7450, writeMb: 6900 },
+  }),
+  storage({
+    brand: "Samsung",
+    name: "990 PRO 2TB NVMe M.2",
+    price: 3399,
+    tags: ["envio-gratis"],
+    art: { tone: "black", accent: "#f97316", label: "990 PRO", sublabel: "2TB" },
+    tech: { interface: "NVMe Gen4", formFactor: "M.2 2280", capacityGb: 2000, readMb: 7450, writeMb: 6900 },
+  }),
+  storage({
+    brand: "WD_BLACK",
+    name: "SN850X 2TB NVMe M.2",
+    price: 3099,
+    compareAt: 3399,
+    art: { tone: "black", accent: "#e5e7eb", label: "SN850X", sublabel: "2TB", variant: 1 },
+    tech: { interface: "NVMe Gen4", formFactor: "M.2 2280", capacityGb: 2000, readMb: 7300, writeMb: 6600 },
+  }),
+  storage({
+    brand: "Kingston",
+    name: "NV3 1TB NVMe M.2",
+    price: 1099,
+    tags: ["top"],
+    art: { tone: "black", accent: "#60a5fa", label: "NV3", sublabel: "1TB", variant: 2 },
+    tech: { interface: "NVMe Gen4", formFactor: "M.2 2280", capacityGb: 1000, readMb: 6000, writeMb: 4000 },
+  }),
+  storage({
+    brand: "Crucial",
+    name: "T705 2TB NVMe M.2 Gen5",
+    price: 5299,
+    tags: ["nuevo", "envio-gratis"],
+    art: { tone: "black", accent: "#38bdf8", label: "T705", sublabel: "2TB", variant: 3 },
+    tech: { interface: "NVMe Gen5", formFactor: "M.2 2280", capacityGb: 2000, readMb: 14500, writeMb: 12700 },
+  }),
+  storage({
+    brand: "Crucial",
+    name: "P3 Plus 2TB NVMe M.2",
+    price: 2099,
+    art: { tone: "black", accent: "#38bdf8", label: "P3 PLUS", sublabel: "2TB", variant: 4 },
+    tech: { interface: "NVMe Gen4", formFactor: "M.2 2280", capacityGb: 2000, readMb: 5000, writeMb: 4200 },
+  }),
+  storage({
+    brand: "Crucial",
+    name: "MX500 1TB SATA 2.5\"",
+    price: 1149,
+    art: { tone: "gunmetal", accent: "#38bdf8", label: "MX500", sublabel: "1TB" },
+    tech: { interface: "SATA", formFactor: '2.5"', capacityGb: 1000, readMb: 560, writeMb: 510 },
+  }),
+];

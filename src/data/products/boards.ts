@@ -1,0 +1,83 @@
+import { board } from "./factory";
+
+/* Tarjetas madre — datos aproximados, precios DEMO. */
+export const boards = [
+  board({
+    brand: "ASUS",
+    name: "TUF Gaming B650-Plus WiFi",
+    price: 4299,
+    tags: ["top"],
+    art: { tone: "black", accent: "#f5a524", label: "B650" },
+    tech: { socket: "AM5", chipset: "B650", formFactor: "ATX", memory: "DDR5", memorySlots: 4, maxMemoryGb: 192, m2Slots: 3, wifi: true },
+  }),
+  board({
+    brand: "Gigabyte",
+    name: "B650M Aorus Elite AX",
+    price: 3699,
+    compareAt: 3999,
+    art: { tone: "black", accent: "#f97316", label: "B650M", variant: 1 },
+    tech: { socket: "AM5", chipset: "B650", formFactor: "Micro-ATX", memory: "DDR5", memorySlots: 4, maxMemoryGb: 192, m2Slots: 2, wifi: true },
+  }),
+  board({
+    brand: "ASRock",
+    name: "B650M Pro RS WiFi",
+    price: 2999,
+    tags: ["top"],
+    art: { tone: "gunmetal", accent: "#a3a3a3", label: "B650M", variant: 2 },
+    tech: { socket: "AM5", chipset: "B650", formFactor: "Micro-ATX", memory: "DDR5", memorySlots: 4, maxMemoryGb: 192, m2Slots: 3, wifi: true },
+  }),
+  board({
+    brand: "MSI",
+    name: "MAG X870 Tomahawk WiFi",
+    price: 6499,
+    tags: ["nuevo", "envio-gratis"],
+    art: { tone: "black", accent: "#e5e7eb", label: "X870", variant: 3 },
+    tech: { socket: "AM5", chipset: "X870", formFactor: "ATX", memory: "DDR5", memorySlots: 4, maxMemoryGb: 256, m2Slots: 4, wifi: true },
+  }),
+  board({
+    brand: "ASUS",
+    name: "ROG Strix B850-I Gaming WiFi",
+    price: 6299,
+    stock: 3,
+    art: { tone: "black", accent: "#e11d48", label: "B850-I", variant: 4 },
+    tech: { socket: "AM5", chipset: "B850", formFactor: "Mini-ITX", memory: "DDR5", memorySlots: 2, maxMemoryGb: 96, m2Slots: 2, wifi: true },
+  }),
+  board({
+    brand: "MSI",
+    name: "B550-A PRO",
+    price: 2399,
+    art: { tone: "gunmetal", accent: "#cbd5e1", label: "B550", variant: 5 },
+    tech: { socket: "AM4", chipset: "B550", formFactor: "ATX", memory: "DDR4", memorySlots: 4, maxMemoryGb: 128, m2Slots: 2, wifi: false },
+  }),
+  board({
+    brand: "Gigabyte",
+    name: "B550M DS3H",
+    price: 1899,
+    compareAt: 2099,
+    art: { tone: "black", accent: "#94a3b8", label: "B550M", variant: 6 },
+    tech: { socket: "AM4", chipset: "B550", formFactor: "Micro-ATX", memory: "DDR4", memorySlots: 4, maxMemoryGb: 128, m2Slots: 2, wifi: false },
+  }),
+  board({
+    brand: "Gigabyte",
+    name: "Z890 Aorus Elite WiFi7",
+    price: 6799,
+    tags: ["envio-gratis"],
+    art: { tone: "black", accent: "#f97316", label: "Z890", variant: 7 },
+    tech: { socket: "LGA1851", chipset: "Z890", formFactor: "ATX", memory: "DDR5", memorySlots: 4, maxMemoryGb: 256, m2Slots: 4, wifi: true },
+  }),
+  board({
+    brand: "ASUS",
+    name: "Prime B860M-A WiFi",
+    price: 3599,
+    tags: ["nuevo"],
+    art: { tone: "white", accent: "#38bdf8", label: "B860M", variant: 8 },
+    tech: { socket: "LGA1851", chipset: "B860", formFactor: "Micro-ATX", memory: "DDR5", memorySlots: 4, maxMemoryGb: 256, m2Slots: 2, wifi: true },
+  }),
+  board({
+    brand: "MSI",
+    name: "PRO B760M-A WiFi DDR4",
+    price: 2899,
+    art: { tone: "gunmetal", accent: "#cbd5e1", label: "B760M", variant: 9 },
+    tech: { socket: "LGA1700", chipset: "B760", formFactor: "Micro-ATX", memory: "DDR4", memorySlots: 4, maxMemoryGb: 128, m2Slots: 2, wifi: true },
+  }),
+];
