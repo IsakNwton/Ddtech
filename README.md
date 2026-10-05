@@ -110,6 +110,17 @@ candidato los problemas que introduce. `src/lib/performance.ts` produce una esti
   `productImage()` y quitar `unoptimized` en `ProductImage` para usar el optimizador de Next.
 - Opiniones y preguntas son ejemplos marcados como tales.
 
+## Modelos 3D
+
+La landing usa modelos 3D procedurales con proporciones reales (tarjeta gráfica de ~304 mm,
+placa ATX, radiador de 360 mm, fuente ATX, gabinete mid-tower) y materiales PBR generados en
+el navegador (aluminio cepillado, PCB, plástico texturizado), con oclusión ambiental y tone
+mapping AgX. Son diseños genéricos, no réplicas de una marca.
+
+Para usar un modelo real con licencia (escaneo del fabricante, CGTrader, Sketchfab…),
+coloca el archivo en `public/models/` y define `NEXT_PUBLIC_GPU_MODEL=/models/gpu.glb`:
+el hero lo cargará, centrará y escalará automáticamente (`src/components/three/custom-model.tsx`).
+
 ## Accesibilidad, rendimiento y SEO
 
 - Navegación completa por teclado, `focus-visible`, enlace "Saltar al contenido", diálogos

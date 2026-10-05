@@ -31,8 +31,8 @@ export function AssemblySection({ total, watts, psu }: { total: number; watts: n
   const bar = useTransform(progress, [0, 1], ["0%", "100%"]);
 
   useMotionValueEvent(scrollYProgress, "change", (v) => {
-    setActive(Math.min(STEPS.length - 1, Math.max(0, Math.floor(v * STEPS.length * 1.02))));
-    setDone(v > 0.96);
+    setActive(Math.min(STEPS.length - 1, Math.max(0, Math.floor(v * 1.12 * STEPS.length))));
+    setDone(v > 0.93);
   });
 
   return (
