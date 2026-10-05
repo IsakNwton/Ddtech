@@ -10,7 +10,7 @@
 
 @theme {
   /* Superficies (de más profundo a más elevado) */
-  --color-bg: #08090b;
+  --color-bg: #060709;
   --color-surface: #0e1014;
   --color-surface-2: #13161b;
   --color-surface-3: #1a1e24;
@@ -75,6 +75,21 @@
   --animate-shimmer: shimmer 1.4s linear infinite;
   --animate-bump: bump 300ms var(--ease-spring);
   --animate-check: check-pop 260ms var(--ease-spring) both;
+  --animate-marquee: marquee 38s linear infinite;
+  --animate-spin-slow: spin-slow 24s linear infinite;
+  --animate-sheen: sheen 6s ease-in-out infinite;
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-100%); }
+  }
+  @keyframes spin-slow {
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+  @keyframes sheen {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
 
   @keyframes fade-in {
     from { opacity: 0; }
@@ -204,6 +219,26 @@
       linear-gradient(to bottom, rgb(255 255 255 / 0.035) 1px, transparent 1px);
     background-size: 48px 48px;
     mask-image: radial-gradient(ellipse 70% 70% at 60% 40%, black 30%, transparent 75%);
+  }
+
+  /* Texto con degradado animado (titulares de la landing) */
+  .text-gradient {
+    background: linear-gradient(100deg, #8aa6ff 0%, #c4b5fd 30%, #ffffff 50%, #7c9cff 70%, #b18cff 100%);
+    background-size: 220% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: var(--animate-sheen);
+  }
+
+  /* Grano sutil sobre fondos oscuros */
+  .noise {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='1'/></svg>");
+  }
+
+  .text-outline {
+    color: transparent;
+    -webkit-text-stroke: 1px rgb(255 255 255 / 0.18);
   }
 
   .scrollbar-none {
