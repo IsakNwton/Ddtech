@@ -14,6 +14,8 @@ export interface BentoItem {
   count?: number;
   from?: number;
   size: "lg" | "tall" | "wide" | "sm";
+  /** Color del resplandor de la tarjeta */
+  glow?: string;
 }
 
 const SIZE: Record<BentoItem["size"], string> = {
@@ -28,9 +30,9 @@ export function BentoCategories({ items }: { items: BentoItem[] }) {
     <section aria-labelledby="bento-title" className="container-page">
       <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
         <div>
-          <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.3em] text-[#8aa6ff]">Categorías</p>
+          <p className="eyebrow">Categorías</p>
           <SplitHeading
-            className="mt-4 text-4xl font-semibold leading-[0.98] tracking-[-0.045em] text-white sm:text-6xl"
+            className="mt-5 text-[2.5rem] font-semibold leading-[0.98] tracking-[-0.05em] text-white sm:text-6xl"
             lines={[{ text: "¿Qué estás" }, { text: "buscando?", className: "text-white/40" }]}
           />
           <span id="bento-title" className="sr-only">
@@ -51,10 +53,15 @@ export function BentoCategories({ items }: { items: BentoItem[] }) {
               <TiltCard className="rounded-[28px]" intensity={c.size === "lg" ? 6 : 10}>
                 <Link
                   href={c.href}
-                  className="relative flex h-full flex-col justify-end overflow-hidden rounded-[28px] border border-white/[0.07] bg-[linear-gradient(160deg,#12151c_0%,#0a0b0f_60%)] p-5 transition-colors duration-300 hover:border-[#4d7cff]/40 sm:p-6"
+                  className="relative flex h-full flex-col justify-end overflow-hidden rounded-[28px] border border-white/[0.07] bg-[linear-gradient(160deg,#12151c_0%,#0a0b0f_60%)] p-5 transition-colors duration-300 hover:border-white/20 sm:p-6"
                   style={{ transformStyle: "preserve-3d" }}
                 >
-                  <span className="pointer-events-none absolute -right-16 -top-16 size-64 rounded-full bg-[#4d7cff]/10 blur-3xl transition-opacity duration-500 group-hover:bg-[#4d7cff]/25" aria-hidden />
+                  <span
+                    className="pointer-events-none absolute -right-16 -top-16 size-64 rounded-full opacity-20 blur-3xl transition-opacity duration-500 group-hover:opacity-45"
+                    style={{ background: c.glow ?? "#4d7cff" }}
+                    aria-hidden
+                  />
+                  <span className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" aria-hidden />
                   <span
                     className={cn(
                       "pointer-events-none absolute inset-x-0 top-0 flex items-center justify-center",

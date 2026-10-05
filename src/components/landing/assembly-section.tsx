@@ -1,11 +1,13 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import { motion, useMotionValueEvent, useScroll, useSpring, useTransform } from "motion/react";
 import { Check } from "lucide-react";
 import { useRef, useState } from "react";
 import { cn } from "@/lib/cn";
 import { formatPrice } from "@/lib/format";
+import { useWebGL } from "@/hooks/use-webgl";
 import { MagneticLink } from "./magnetic";
 
 const AssemblyScene = dynamic(() => import("@/components/three/assembly-scene"), { ssr: false, loading: () => null });
@@ -29,24 +31,27 @@ export function AssemblySection({ total, watts, psu }: { total: number; watts: n
   const [active, setActive] = useState(0);
   const [done, setDone] = useState(false);
   const bar = useTransform(progress, [0, 1], ["0%", "100%"]);
+  const webgl = useWebGL();
 
   useMotionValueEvent(scrollYProgress, "change", (v) => {
     setActive(Math.min(STEPS.length - 1, Math.max(0, Math.floor(v * 1.12 * STEPS.length))));
     setDone(v > 0.93);
   });
 
+  if (webgl === false) return <StaticAssembly sectionRef={ref} total={total} watts={watts} psu={psu} />;
+
   return (
     <section ref={ref} aria-labelledby="assembly-title" className="relative h-[420vh] bg-[#060709]">
       <div className="sticky top-0 h-svh overflow-hidden">
-        <AssemblyScene progress={progress} className="absolute inset-0" />
+        {webgl && <AssemblyScene progress={progress} className="absolute inset-0" />}
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#060709] via-[#060709]/40 to-transparent lg:via-transparent" />
         <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#060709] to-transparent" />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#060709] to-transparent" />
 
         <div className="container-page relative flex h-full flex-col justify-between pb-24 pt-24 lg:justify-center lg:pb-24">
           <div className="max-w-md">
-            <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.3em] text-[#8aa6ff]">Arma tu PC</p>
-            <h2 id="assembly-title" className="mt-4 text-4xl font-semibold leading-[0.98] tracking-[-0.045em] text-white sm:text-6xl">
+            <p className="eyebrow">Arma tu PC</p>
+            <h2 id="assembly-title" className="mt-5 text-[2.5rem] font-semibold leading-[0.98] tracking-[-0.05em] text-white sm:text-6xl">
               Pieza por pieza.
               <br />
               <span className="text-white/40">Sin errores.</span>
@@ -130,6 +135,54 @@ export function AssemblySection({ total, watts, psu }: { total: number; watts: n
             </MagneticLink>
           </div>
         </motion.div>
+      </div>
+    </section>
+  );
+}
+
+/** Respaldo sin WebGL: los ocho pasos completos junto a la ilustración de la PC */
+function StaticAssembly({ sectionRef, total, watts, psu }: { sectionRef: React.RefObject<HTMLElement | null>; total: number; watts: number; psu: number }) {
+  return (
+    <section ref={sectionRef} aria-labelledby="assembly-title" className="relative bg-[#060709] py-24 md:py-32">
+      <div className="container-page grid items-center gap-12 lg:grid-cols-2">
+        <div>
+          <p className="eyebrow">Arma tu PC</p>
+          <h2 id="assembly-title" className="mt-5 text-4xl font-semibold leading-[0.98] tracking-[-0.045em] text-white sm:text-6xl">
+            Pieza por pieza.
+            <br />
+            <span className="text-white/40">Sin errores.</span>
+          </h2>
+          <ol className="mt-10 grid gap-2 sm:grid-cols-2">
+            {STEPS.map((s) => (
+              <li key={s.n} className="flex items-start gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3">
+                <span className="mt-0.5 font-mono text-xs tabular-nums text-[#9db5ff]">{s.n}</span>
+                <span>
+                  <span className="flex items-center gap-2 text-sm font-semibold text-white">
+                    {s.t} <Check className="size-3.5 text-emerald-400" strokeWidth={3} aria-hidden />
+                  </span>
+                  <span className="mt-0.5 block text-xs text-white/50">{s.d}</span>
+                </span>
+              </li>
+            ))}
+          </ol>
+        </div>
+        <div className="relative flex flex-col items-center">
+          <span className="absolute top-1/3 size-80 rounded-full bg-[#3b6bff]/25 blur-3xl" aria-hidden />
+          <Image src="/art/hero-pc.svg" alt="" width={480} height={512} unoptimized className="relative h-[420px] w-auto" />
+          <div className="glass relative -mt-16 w-full max-w-sm rounded-3xl p-6">
+            <p className="flex items-center gap-2 text-sm font-semibold text-emerald-300">
+              <Check className="size-4" strokeWidth={3.5} aria-hidden /> Todo compatible
+            </p>
+            <p className="mt-3 text-sm text-white/55">
+              {watts} W estimados · fuente de {psu} W+ · <span className="font-semibold text-white">{formatPrice(total)}</span> demo
+            </p>
+            <div className="mt-5">
+              <MagneticLink href="/arma-tu-pc?preset=1440p" block className="h-12 w-full px-6 text-sm">
+                Personalizar esta build
+              </MagneticLink>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );

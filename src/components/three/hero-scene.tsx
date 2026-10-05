@@ -34,10 +34,11 @@ function HeroGpu() {
     g.rotation.y = THREE.MathUtils.damp(g.rotation.y, targetY, 5, dt);
     g.rotation.x = THREE.MathUtils.damp(g.rotation.x, targetX, 5, dt);
     g.rotation.z = THREE.MathUtils.damp(g.rotation.z, targetZ, 5, dt);
-    const s = (wide ? 0.86 : 0.5) * (0.7 + intro * 0.3);
+    const s = (wide ? 0.86 : 0.72) * (0.7 + intro * 0.3);
     g.scale.setScalar(THREE.MathUtils.damp(g.scale.x, s, 6, dt));
     const baseX = wide ? viewport.width * 0.2 : 0;
-    const baseY = wide ? -0.05 : 1.3;
+    // En móvil el lienzo ocupa solo la franja superior del hero
+    const baseY = wide ? -0.05 : 0.2;
     g.position.x = THREE.MathUtils.damp(g.position.x, baseX, 4, dt);
     g.position.y = THREE.MathUtils.damp(g.position.y, baseY + (1 - intro) * -0.8 + scroll * 0.9, 5, dt);
   });

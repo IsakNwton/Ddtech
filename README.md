@@ -29,7 +29,7 @@ Requiere Node 20+.
 
 | Ruta | Descripción |
 | --- | --- |
-| `/` | Home: hero con PC navegable, categorías, ofertas, promo del configurador, builds recomendadas, descubrimiento |
+| `/` | Landing: hero 3D con aura de luz, por qué DDTech, categorías, ensamble por scroll, PCs recomendadas, ofertas, proceso de armado, descubrimiento, tienda en Guadalajara y FAQ |
 | `/componentes` | Índice de categorías |
 | `/componentes/[categoria]` | Listado con filtros (p. ej. `/componentes/gpu`) |
 | `/producto/[slug]` | Ficha de producto |
@@ -116,6 +116,9 @@ La landing usa modelos 3D procedurales con proporciones reales (tarjeta gráfica
 placa ATX, radiador de 360 mm, fuente ATX, gabinete mid-tower) y materiales PBR generados en
 el navegador (aluminio cepillado, PCB, plástico texturizado), con oclusión ambiental y tone
 mapping AgX. Son diseños genéricos, no réplicas de una marca.
+
+Si el navegador no puede crear un contexto WebGL, el hero y la sección de ensamble muestran
+la ilustración vectorial de la PC en su lugar (`src/hooks/use-webgl.ts`).
 
 Para usar un modelo real con licencia (escaneo del fabricante, CGTrader, Sketchfab…),
 coloca el archivo en `public/models/` y define `NEXT_PUBLIC_GPU_MODEL=/models/gpu.glb`:

@@ -11,14 +11,16 @@ export function DiscoveryTabs({ tabs }: { tabs: { id: string; label: string; pro
   const current = tabs.find((t) => t.id === active) ?? tabs[0];
   return (
     <section aria-labelledby="discover-title" className="container-page">
-      <div className="mb-6 flex flex-wrap items-end justify-between gap-4 md:mb-8">
+      <div className="mb-10 flex flex-wrap items-end justify-between gap-6 md:mb-12">
         <div>
-          <p className="mb-2 font-mono text-2xs font-semibold uppercase tracking-[0.16em] text-brand-text">Descubre</p>
-          <h2 id="discover-title" className="text-2xl font-semibold tracking-[-0.025em] md:text-[1.75rem]">
-            Lo que está armando la comunidad
+          <p className="eyebrow">Descubre</p>
+          <h2 id="discover-title" className="mt-5 text-[2.5rem] font-semibold leading-[0.98] tracking-[-0.05em] text-white sm:text-6xl">
+            Lo que está armando
+            <br />
+            <span className="text-white/40">la comunidad.</span>
           </h2>
         </div>
-        <div role="tablist" aria-label="Colecciones" className="flex gap-1 overflow-x-auto rounded-lg border border-line bg-surface p-1 scrollbar-none">
+        <div role="tablist" aria-label="Colecciones" className="flex gap-1 overflow-x-auto rounded-full border border-white/[0.08] bg-white/[0.03] p-1 backdrop-blur scrollbar-none">
           {tabs.map((t) => (
             <button
               key={t.id}
@@ -29,8 +31,8 @@ export function DiscoveryTabs({ tabs }: { tabs: { id: string; label: string; pro
               aria-controls={`panel-${t.id}`}
               onClick={() => setActive(t.id)}
               className={cn(
-                "h-9 whitespace-nowrap rounded-md px-3.5 text-sm font-medium transition-colors duration-150",
-                active === t.id ? "bg-surface-4 text-fg" : "text-fg-muted hover:text-fg",
+                "h-10 whitespace-nowrap rounded-full px-4 text-sm font-medium transition-colors duration-200",
+                active === t.id ? "bg-white text-[#07080a]" : "text-fg-muted hover:text-fg",
               )}
             >
               {t.label}

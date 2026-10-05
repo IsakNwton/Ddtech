@@ -30,7 +30,7 @@ export function DealsHorizontal({ products }: { products: ProductSummary[] }) {
 
   const header = (
     <div className="flex w-[min(420px,80vw)] shrink-0 flex-col justify-center pr-6">
-      <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.3em] text-[#ff8a72]">Contenido conceptual</p>
+      <p className="eyebrow text-[#ff9b85]">Contenido conceptual</p>
       <h2 id="deals-title" className="mt-4 text-5xl font-semibold leading-[0.95] tracking-[-0.05em] text-white sm:text-6xl">
         Ofertas
         <br />
