@@ -1,18 +1,23 @@
-import { Logo } from "@/components/layout/logo";
-import { ButtonLink } from "@/components/ui/button";
+import Link from "next/link";
+import { buttonClass } from "@/components/ui/button";
 
 export default function NotFound() {
   return (
-    <main id="contenido" className="container-page flex min-h-dvh flex-col items-center justify-center text-center">
-      <Logo />
-      <p className="mt-10 font-mono text-sm text-brand-text">Error 404</p>
-      <h1 className="mt-2 text-3xl font-semibold tracking-[-0.03em]">No encontramos esta página</h1>
-      <p className="mt-2 max-w-md text-fg-muted">Puede que el producto ya no esté disponible o que el enlace haya cambiado.</p>
-      <div className="mt-8 flex gap-3">
-        <ButtonLink href="/">Ir al inicio</ButtonLink>
-        <ButtonLink href="/arma-tu-pc" variant="secondary">
-          Arma tu PC
-        </ButtonLink>
+    <main id="contenido" className="grid min-h-[100svh] place-items-center px-6 text-center">
+      <div>
+        <p className="eyebrow">Error 404</p>
+        <h1 className="mt-6 font-display text-6xl tracking-[-0.025em] sm:text-7xl">
+          Esta sala está <span className="italic">vacía</span>
+        </h1>
+        <p className="mx-auto mt-6 max-w-md text-muted-text">La página que busca no existe o la obra ya no está publicada.</p>
+        <div className="mt-10 flex flex-wrap justify-center gap-3">
+          <Link href="/obras" className={buttonClass("primary", "lg")}>
+            Ver las obras
+          </Link>
+          <Link href="/" className={buttonClass("outline", "lg")}>
+            Volver al inicio
+          </Link>
+        </div>
       </div>
     </main>
   );

@@ -1,59 +1,65 @@
 import type { Metadata, Viewport } from "next";
+import { Cormorant_Garamond } from "next/font/google";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
-import { CartDrawer } from "@/components/cart/cart-drawer";
-import { Toaster } from "@/components/feedback/toaster";
-import { Providers } from "@/components/providers";
-import { MobileSearch } from "@/components/search/mobile-search";
-import { DISCLAIMER, SITE_URL } from "@/lib/seo";
+import { MotionProvider } from "@/components/motion/motion-provider";
+import { getArtist } from "@/lib/data";
+import { SITE_INDEXING, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
-export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
-  title: {
-    default: "DDTech — Componentes, PCs Gaming y hardware (concepto de rediseño)",
-    template: "%s · DDTech (concepto)",
-  },
-  description:
-    "Concepto de rediseño de la experiencia de compra de DDTech: componentes, PCs gaming, periféricos y un configurador de PC con verificación de compatibilidad. " +
-    DISCLAIMER,
-  applicationName: "DDTech Concept",
-  // Concepto no oficial: se evita que los buscadores lo indexen como si fuera la tienda real.
-  robots: { index: false, follow: false },
-  openGraph: {
-    type: "website",
-    locale: "es_MX",
-    siteName: "DDTech · Concepto de rediseño",
-    images: [{ url: "/og.png", width: 1200, height: 630, alt: "DDTech — concepto de rediseño" }],
-  },
-  twitter: { card: "summary_large_image", images: ["/og.png"] },
-  formatDetection: { telephone: false },
-};
+const display = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
+  style: ["normal", "italic"],
+  variable: "--font-display",
+  display: "swap",
+});
+
+export async function generateMetadata(): Promise<Metadata> {
+  const artist = await getArtist();
+  const title = `${artist.name} — Pintor · Galería de obra original`;
+  return {
+    metadataBase: new URL(SITE_URL),
+    title: { default: title, template: `%s · ${artist.name}` },
+    description: `Galería oficial de ${artist.name}. ${artist.tagline}. Obras originales, colecciones, trayectoria y consultas de adquisición.`,
+    applicationName: `${artist.name} · Galería`,
+    authors: [{ name: artist.name }],
+    creator: artist.name,
+    // Mientras haya contenido de demostración no se indexa (SITE_INDEXING=true para activarlo)
+    robots: SITE_INDEXING ? { index: true, follow: true } : { index: false, follow: false },
+    openGraph: { type: "website", locale: "es_MX", siteName: `${artist.name} · Galería`, title, url: "/" },
+    twitter: { card: "summary_large_image", title },
+    formatDetection: { telephone: false, email: false, address: false },
+  };
+}
 
 export const viewport: Viewport = {
-  themeColor: "#08090b",
-  colorScheme: "dark",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f8f7f4" },
+    { media: "(prefers-color-scheme: dark)", color: "#131211" },
+  ],
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
 };
 
+/** Aplica el tema guardado antes de pintar para evitar destellos */
+const themeScript = `(function(){try{var t=localStorage.getItem("theme");if(t!=="light"&&t!=="dark"){t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}})()`;
+
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="es-MX" className={`${GeistSans.variable} ${GeistMono.variable}`}>
+    <html lang="es" className={`${GeistSans.variable} ${GeistMono.variable} ${display.variable}`} data-theme="light" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className="min-h-dvh">
         <a
           href="#contenido"
-          className="fixed left-4 top-3 z-[100] -translate-y-20 rounded-md bg-brand px-4 py-2 text-sm font-semibold text-white transition-transform focus:translate-y-0"
+          className="glass glass-strong fixed left-4 top-4 z-[200] -translate-y-24 rounded-full px-5 py-3 text-sm font-medium text-ink transition-transform duration-300 focus:translate-y-0"
         >
           Saltar al contenido
         </a>
-        <Providers>
-          {children}
-          <CartDrawer />
-          <MobileSearch />
-          <Toaster />
-        </Providers>
+        <MotionProvider>{children}</MotionProvider>
       </body>
     </html>
   );

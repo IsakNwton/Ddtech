@@ -1,62 +1,48 @@
-const currency = new Intl.NumberFormat("es-MX", {
-  style: "currency",
-  currency: "MXN",
-  maximumFractionDigits: 0,
-});
+import { LOCALE } from "./site";
+import type { Availability, Dimensions, Price } from "./types";
 
-const currency2 = new Intl.NumberFormat("es-MX", {
-  style: "currency",
-  currency: "MXN",
-  minimumFractionDigits: 2,
-  maximumFractionDigits: 2,
-});
+export const availabilityLabel: Record<Availability, string> = {
+  disponible: "Disponible",
+  reservada: "Reservada",
+  vendida: "Vendida",
+  "coleccion-privada": "Colección privada",
+  "no-disponible": "No disponible",
+};
 
-const integer = new Intl.NumberFormat("es-MX");
+export const availabilityOrder: Availability[] = ["disponible", "reservada", "vendida", "coleccion-privada", "no-disponible"];
 
-/** $12,999 */
-export function formatPrice(value: number): string {
-  return currency.format(value);
+const num = (n: number) => new Intl.NumberFormat(LOCALE, { maximumFractionDigits: 1 }).format(n);
+
+/** «80 × 120 cm» (alto × ancho), con profundidad si existe */
+export function formatDimensions(d: Dimensions) {
+  const base = `${num(d.height)} × ${num(d.width)}`;
+  return d.depth ? `${base} × ${num(d.depth)} cm` : `${base} cm`;
 }
 
-/** $1,083.25 — para mensualidades */
-export function formatPriceCents(value: number): string {
-  return currency2.format(value);
+export function formatPrice(price: Price | null, availability: Availability) {
+  if (availability === "vendida" || availability === "coleccion-privada") return null;
+  if (!price || !price.visible) return "Precio a consultar";
+  return new Intl.NumberFormat(LOCALE, { style: "currency", currency: price.currency, maximumFractionDigits: 0 }).format(price.amount);
 }
 
-export function formatNumber(value: number): string {
-  return integer.format(value);
+/** Divide un texto en párrafos (separados por una línea en blanco) */
+export function paragraphs(text: string) {
+  return text
+    .split(/\n\s*\n/)
+    .map((p) => p.trim())
+    .filter(Boolean);
 }
 
-export function discountPercent(price: number, compareAt?: number): number {
-  if (!compareAt || compareAt <= price) return 0;
-  return Math.round(((compareAt - price) / compareAt) * 100);
-}
-
-export function slugify(value: string): string {
-  return value
+export function slugify(input: string) {
+  return input
     .normalize("NFD")
     .replace(/[̀-ͯ]/g, "")
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "");
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 80);
 }
 
-/** Normaliza para búsqueda: minúsculas, sin acentos, sin signos */
-export function normalize(value: string): string {
-  return value
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9.]+/g, " ")
-    .trim();
-}
-
-export function pluralize(n: number, one: string, many: string): string {
-  return `${formatNumber(n)} ${n === 1 ? one : many}`;
-}
-
-export function stockLabel(stock: number): { label: string; tone: "ok" | "low" | "out" } {
-  if (stock <= 0) return { label: "Agotado", tone: "out" };
-  if (stock <= 5) return { label: `Últimas ${stock} piezas`, tone: "low" };
-  return { label: "En existencia", tone: "ok" };
+export function formatDate(iso: string) {
+  return new Intl.DateTimeFormat(LOCALE, { dateStyle: "long", timeStyle: "short" }).format(new Date(iso));
 }

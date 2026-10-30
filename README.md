@@ -1,143 +1,167 @@
-# DDTech — Concepto de rediseño
+# Galería de arte digital
 
-> **Concepto de rediseño independiente. No afiliado oficialmente con DDTech.**
-> Precios, existencias, opiniones, contadores, políticas y configuraciones son **demostrativos**.
-> Todo dato corporativo que DDTech debe confirmar aparece marcado como _placeholder_.
+Sitio web y panel de administración para un pintor: galería de obras con fichas
+curatoriales, colecciones, biografía y consultas de adquisición.
 
-Propuesta de experiencia de compra para una tienda mexicana de hardware: búsqueda predictiva,
-catálogo con filtros por especificación, fichas de producto completas, comparador, carrito
-lateral, checkout sin distracciones y un configurador **Arma tu PC** con verificación de
-compatibilidad, consumo estimado y rendimiento orientativo.
+> **Estado actual: contenido de demostración.**
+> Las 10 pinturas, sus fotografías y la biografía son **provisionales**. Las imágenes se
+> generaron por computadora (`scripts/demo-art`) y **no son obras del artista**; los textos
+> biográficos están entre corchetes y no contienen datos inventados. Todo se identifica
+> como demostración en el propio sitio.
 
-La página [`/propuesta`](src/app/(store)/propuesta/page.tsx) resume las decisiones de UX
-(antes → después, impacto y KPI a medir), el sistema de diseño y lo que se necesita de DDTech
-para llevarlo a producción.
+---
 
-## Cómo correrlo
+## Puesta en marcha
+
+Requiere **Node.js 20.9 o superior**.
 
 ```bash
 npm install
 npm run dev        # http://localhost:3000
-npm run build      # build de producción (≈600 rutas y recursos estáticos)
-npm run start
+npm run build      # compilación de producción
+npm run start      # servir la compilación
 npm run lint
 ```
 
-Requiere Node 20+.
+Sin variables de entorno, el sitio funciona completo con el contenido de demostración y el
+panel (`/admin`) se abre en **modo demostración de solo lectura**.
 
-## Páginas
+---
 
-| Ruta | Descripción |
-| --- | --- |
-| `/` | Landing: hero 3D con aura de luz, por qué DDTech, categorías, ensamble por scroll, PCs recomendadas, ofertas, proceso de armado, descubrimiento, tienda en Guadalajara y FAQ |
-| `/componentes` | Índice de categorías |
-| `/componentes/[categoria]` | Listado con filtros (p. ej. `/componentes/gpu`) |
-| `/producto/[slug]` | Ficha de producto |
-| `/arma-tu-pc` | Configurador (`?preset=1440p`, `?agregar=<slug>`, `?b=<build compartida>`) |
-| `/comparar` | Comparador (hasta 4 productos de la misma categoría) |
-| `/ofertas` | Ofertas de la semana (contador demostrativo) |
-| `/pcs-gaming`, `/perifericos` | Listados con filtros |
-| `/buscar?q=` | Resultados de búsqueda |
-| `/carrito`, `/checkout` | Carrito y checkout en 4 pasos |
-| `/cuenta`, `/favoritos` | Área de cliente demo (pedidos, builds guardadas) |
-| `/soporte` | Centro de ayuda propuesto |
-| `/propuesta` | Presentación del concepto |
+## Qué funciona ya y qué necesita configuración
 
-## Stack
+| Función | Estado sin configurar | Qué hace falta |
+| --- | --- | --- |
+| Portada, obras, filtros, fichas, colecciones, artista | ✅ Operativo (demo) | — |
+| Zoom de alta resolución, modo «Contemplar obra», compartir | ✅ Operativo | — |
+| Transiciones compartidas entre galería y obra | ✅ Navegadores con View Transitions (Chrome/Edge 125+, Safari 18+); en el resto, cambio instantáneo | — |
+| Modo claro / oscuro, accesibilidad, movimiento reducido | ✅ Operativo | — |
+| SEO: metadatos, Open Graph, sitemap, datos estructurados | ✅ Operativo · indexación **desactivada** | `SITE_INDEXING=true` y `NEXT_PUBLIC_SITE_URL` cuando haya contenido real |
+| Formulario de contacto | ✅ Valida y responde, pero **avisa de que no puede enviar** | Supabase (clave de servicio) y/o Resend |
+| Correo, WhatsApp, redes | Se muestran como «Pendiente de configurar» | Variables `NEXT_PUBLIC_*` |
+| Panel de administración | Solo lectura (no guarda) | Supabase |
+| Subida de fotografías | Desactivada | Supabase Storage |
+| Pagos | ❌ No implementados (decisión deliberada: la compra empieza como consulta) | — |
 
-- **Next.js 16** (App Router, componentes de servidor, generación estática) + **React 19**
-- **TypeScript** estricto
-- **Tailwind CSS v4** con tokens de diseño en `src/app/globals.css`
-- **Zustand** para estado de cliente persistido (carrito, favoritos, comparador, builds, cuenta demo)
-- **lucide-react** (iconos) y **Geist** (tipografía, servida localmente)
+---
 
-## Estructura
+## Configurar Supabase (base de datos, fotos y acceso al panel)
+
+1. Cree un proyecto en [supabase.com](https://supabase.com).
+2. En **SQL Editor**, pegue y ejecute `supabase/migrations/0001_galeria.sql`. Crea las
+   tablas, las políticas de seguridad (RLS) y el bucket público `obras` para las fotografías.
+3. En **Authentication → Users → Add user**, cree el usuario del artista (correo y contraseña).
+   Conviene desactivar el registro público en **Authentication → Providers → Email → Allow new users to sign up**.
+4. Conviértalo en administrador (SQL Editor):
+   ```sql
+   insert into public.admins (user_id)
+   select id from auth.users where email = 'correo-del-artista@ejemplo.com';
+   ```
+5. Copie `.env.example` a `.env.local` y complete:
+   ```
+   NEXT_PUBLIC_SUPABASE_URL=...
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=...
+   SUPABASE_SERVICE_ROLE_KEY=...   # solo servidor: guarda los mensajes del formulario
+   NEXT_PUBLIC_SITE_URL=https://su-dominio.com
+   ```
+6. Para el acceso con enlace por correo, añada `https://su-dominio.com/admin/auth/callback`
+   en **Authentication → URL Configuration → Redirect URLs**.
+7. Vuelva a compilar (`npm run build`). Las variables `NEXT_PUBLIC_*` se incorporan al compilar.
+
+Con Supabase activo, **el contenido de demostración deja de usarse** (no se mezcla con el real):
+la galería mostrará solo lo que se publique desde el panel.
+
+### Seguridad
+
+- Las rutas `/admin/*` pasan por `src/proxy.ts`, que refresca la sesión y redirige al acceso.
+- Cada página del panel y **cada acción de servidor** verifica de nuevo, en el servidor, que el
+  usuario esté en la tabla `admins` (`src/lib/auth.ts`). No hay contraseñas en el frontend.
+- La base de datos aplica RLS: el público solo puede leer obras y colecciones publicadas; solo
+  los administradores escriben. Los mensajes del formulario se insertan con la clave de servicio
+  desde el servidor, de modo que nadie puede escribir en esa tabla con la clave pública.
+- Las acciones solo aceptan imágenes alojadas en el bucket `obras` del propio proyecto.
+
+## Envío de correos del formulario (opcional)
+
+Con una cuenta de [Resend](https://resend.com) y un dominio verificado:
+
+```
+RESEND_API_KEY=...
+CONTACT_TO_EMAIL=consultas@su-dominio.com
+CONTACT_FROM_EMAIL="Galería <consultas@su-dominio.com>"
+```
+
+Si están configurados Supabase y Resend, cada consulta se guarda en el panel (**Mensajes**)
+y además llega por correo.
+
+---
+
+## Reemplazar el contenido de demostración
+
+- **Recomendado:** configure Supabase y cargue las obras desde `/admin` → «Agregar pintura».
+  El panel sube la foto, calcula sus medidas, su color dominante y una miniatura difuminada para
+  la carga progresiva.
+- **Sin base de datos:** edite `src/content/demo/artworks.ts`, `collections.ts` y `artist.ts`,
+  coloque las fotografías en `public/` y cambie `isDemo` a `false` / `isPlaceholder` a `false`.
+- Para regenerar las imágenes de demostración: `node scripts/demo-art/generate.mjs`
+  (usa Chromium vía Playwright).
+
+---
+
+## Arquitectura
 
 ```
 src/
-  app/
-    (store)/            páginas con header, footer y navegación inferior
-    (checkout)/         checkout sin distracciones (layout propio)
-    api/                índice de búsqueda y datos de comparación (JSON estático)
-    art/[file]/         ilustraciones de producto servidas como SVG estáticos
-  components/
-    ui/                 primitivas del sistema de diseño (Button, Badge, Price, Sheet, Skeleton…)
-    layout/             header, mega menús, menú móvil, navegación inferior, footer
-    search/             búsqueda predictiva (combobox accesible) de escritorio y móvil
-    product/            tarjeta, galería, caja de compra, secciones de ficha, carruseles
-    catalog/            vista de catálogo, panel de filtros, rango de precio
-    builder/            configurador Arma tu PC
-    compare/ cart/ checkout/ account/ home/ feedback/
-  data/                 catálogo demo, categorías, builds recomendadas, opiniones de ejemplo
-  hooks/                hooks reutilizables (búsqueda, acciones de producto, media queries…)
-  lib/                  lógica pura: compatibilidad, rendimiento, filtros, búsqueda, arte, SEO
-  store/                stores de Zustand
+├─ app/
+│  ├─ (site)/                 Sitio público (nav flotante, pie, scroll suave)
+│  │  ├─ page.tsx             Portada cinematográfica
+│  │  ├─ obras/               Galería con filtros + página de cada obra
+│  │  ├─ colecciones/         Índice y página de colección
+│  │  ├─ artista/             Biografía editorial
+│  │  └─ contacto/            Consultas y adquisiciones
+│  ├─ admin/                  Panel privado (acceso, obras, colecciones, biografía, mensajes)
+│  ├─ sitemap.ts · robots.ts · opengraph-image.tsx · manifest.ts
+│  └─ globals.css             Sistema de diseño (tokens, Liquid Glass, view transitions)
+├─ components/
+│  ├─ art/                    Imagen de obra (sin recortes), tarjeta, explorador con filtros
+│  ├─ artwork/                Escenario, visor con zoom, modo contemplación, ficha técnica
+│  ├─ home/ · artist/ · contact/ · admin/ · layout/ · motion/ · ui/
+├─ content/demo/              Contenido de demostración (reemplazable)
+├─ lib/
+│  ├─ data/                   Repositorio: demo ⇄ Supabase con el mismo modelo
+│  ├─ actions/                Acciones de servidor (contacto, panel, acceso)
+│  ├─ supabase/               Clientes (servidor, navegador, servicio)
+│  ├─ types.ts                Modelo de datos (Artwork, Collection, ArtistProfile…)
+│  └─ auth.ts                 Verificación de administrador en el servidor
+├─ proxy.ts                   Sesión y protección optimista de /admin
+supabase/migrations/          Esquema SQL con RLS y almacenamiento
+scripts/demo-art/             Generador de pinturas de demostración
 ```
 
-## Sistema de diseño
+### Sistema de diseño
 
-- Interfaz oscura con **un solo color de acento**. El acento es **provisional**: no se pudo
-  verificar el color corporativo oficial. Para cambiarlo, edita `--color-brand`,
-  `--color-brand-hover`, `--color-brand-text`, `--color-brand-soft` y `--color-brand-line`
-  en `src/app/globals.css`; todo el sitio se actualiza.
-- El logotipo es un wordmark conceptual (`src/components/layout/logo.tsx`), no el logotipo
-  oficial; debe sustituirse por el activo de marca real.
-- Escala tipográfica Geist Sans / Geist Mono, grid de 4 px, contenedor de 1440 px,
-  radios 6/10/14/20 px, animaciones de 150–300 ms que respetan `prefers-reduced-motion`.
+- **Paleta:** blanco cálido `#F8F7F4`, marfil `#F1EFE9`, carbón `#202020`, gris cálido
+  `#85817C`, dorado discreto `#B5A17A` (más variantes con contraste AA para texto pequeño).
+  Modo oscuro con los mismos tokens.
+- **Tipografía:** Cormorant Garamond (títulos editoriales) + Geist (texto y controles).
+- **Liquid Glass** (`.glass`, `.glass-dark`): fondo translúcido con `backdrop-filter`, borde con
+  refracción simulada, brillo especular que sigue al cursor (solo en la superficie bajo el puntero)
+  y sombras en capas. Alternativas opacas si el navegador no soporta desenfoque o si el usuario
+  prefiere transparencia reducida.
+- **Las pinturas nunca se recortan:** todas las imágenes respetan su proporción original.
 
-## Arma tu PC: compatibilidad
+### Movimiento
 
-`src/lib/compatibility.ts` contiene reglas deterministas y fáciles de extender:
+- **Motion:** apariciones al desplazarse, máscaras de texto, nav con indicador animado, menú
+  móvil, filtros, botones magnéticos, resortes ajustados.
+- **View Transitions (React `<ViewTransition>`):** la pintura se expande de la galería a su página;
+  deslizamiento direccional entre obra anterior/siguiente; fundido de página.
+- **GSAP ScrollTrigger:** solo en el recorrido horizontal de obras destacadas de la portada
+  (escritorio). Se carga bajo demanda.
+- `prefers-reduced-motion` desactiva desplazamientos, parallax, scroll suave y transiciones.
 
-- Socket CPU ↔ tarjeta madre y tipo de memoria soportado
-- RAM: tipo (DDR4/DDR5), módulos vs. ranuras, capacidad máxima
-- Gabinete: formato de tarjeta madre, largo de GPU (con aviso de espacio justo), altura de
-  disipador y soporte de radiadores
-- Refrigeración: socket y TDP de referencia; aviso si el CPU no incluye disipador
-- Fuente: consumo estimado, potencia recomendada (margen y recomendación de la GPU),
-  conector 12V-2x6 nativo o adaptador con suficientes cables PCIe de 8 pines
+### Rendimiento
 
-Cada opción se evalúa como `✓ Compatible`, `⚠ Revisar` o `✕ No compatible` y se atribuyen al
-candidato los problemas que introduce. `src/lib/performance.ts` produce una estimación
-**orientativa** (1080p/1440p/4K y uso) a partir de índices relativos de demostración.
-
-## Datos
-
-- `src/data/products/*`: ~90 productos inspirados en hardware real. Las especificaciones son
-  aproximadas; precios, existencias, valoraciones y ventas son ficticios y deterministas.
-- Las imágenes son ilustraciones vectoriales propias (`src/lib/art`) servidas como archivos
-  estáticos con caché inmutable y carga diferida. Con fotografía real basta con cambiar
-  `productImage()` y quitar `unoptimized` en `ProductImage` para usar el optimizador de Next.
-- Opiniones y preguntas son ejemplos marcados como tales.
-
-## Modelos 3D
-
-La landing usa modelos 3D procedurales con proporciones reales (tarjeta gráfica de ~304 mm,
-placa ATX, radiador de 360 mm, fuente ATX, gabinete mid-tower) y materiales PBR generados en
-el navegador (aluminio cepillado, PCB, plástico texturizado), con oclusión ambiental y tone
-mapping AgX. Son diseños genéricos, no réplicas de una marca.
-
-Si el navegador no puede crear un contexto WebGL, el hero y la sección de ensamble muestran
-la ilustración vectorial de la PC en su lugar (`src/hooks/use-webgl.ts`).
-
-Para usar un modelo real con licencia (escaneo del fabricante, CGTrader, Sketchfab…),
-coloca el archivo en `public/models/` y define `NEXT_PUBLIC_GPU_MODEL=/models/gpu.glb`:
-el hero lo cargará, centrará y escalará automáticamente (`src/components/three/custom-model.tsx`).
-
-## Accesibilidad, rendimiento y SEO
-
-- Navegación completa por teclado, `focus-visible`, enlace "Saltar al contenido", diálogos
-  nativos (`<dialog>`) con trampa de foco, combobox ARIA en la búsqueda, `aria-live` en
-  toasts y estados de compatibilidad. Las páginas principales pasan axe-core (WCAG 2.1 AA).
-- Páginas estáticas, componentes de servidor por defecto, índice de búsqueda y datos de
-  comparación descargados solo cuando se necesitan, skeletons en estados de carga.
-- Metadatos por página, Open Graph (`public/og.png`), Schema.org (`Product`,
-  `BreadcrumbList`, `WebSite` con `SearchAction`). Como es un concepto no oficial,
-  `robots` bloquea la indexación.
-
-## Para producción se necesita de DDTech
-
-Logotipo y color oficiales · catálogo, fichas y fotografía · precios e inventario en tiempo
-real · políticas de envío, garantía, devoluciones y facturación · métodos de pago y MSI ·
-sucursales y canales de contacto · plataforma de reseñas · validación de reglas de
-compatibilidad por su equipo técnico.
+Páginas estáticas con revalidación (ISR, 5 min) y revalidación inmediata al guardar desde el panel;
+`next/image` con AVIF/WebP, placeholders difuminados y tamaños adaptados; visor y modo
+contemplación cargados bajo demanda.

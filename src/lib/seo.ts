@@ -1,36 +1,58 @@
-import type { Metadata } from "next";
+import { SITE_URL } from "./site";
+import type { ArtistProfile, Artwork, CollectionWithWorks } from "./types";
 
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-export const SITE_NAME = "DDTech · Concepto de rediseño";
-/** Imagen social (PNG): las redes no admiten SVG */
-export const OG_IMAGE = "/og.png";
-export const DISCLAIMER = "Concepto de rediseño independiente. No afiliado oficialmente con DDTech.";
+export const absolute = (path: string) => (path.startsWith("http") ? path : `${SITE_URL}${path}`);
 
-export function pageMetadata({
-  title,
-  description,
-  path,
-  image,
-}: {
-  title: string;
-  description: string;
-  path: string;
-  /** Solo imágenes rasterizadas (PNG/JPG) */
-  image?: string;
-}): Metadata {
+export function personLd(artist: ArtistProfile) {
   return {
-    title,
-    description,
-    alternates: { canonical: path },
-    openGraph: {
-      title,
-      description,
-      url: path,
-      siteName: SITE_NAME,
-      locale: "es_MX",
-      type: "website",
-      images: [{ url: image ?? OG_IMAGE, width: 1200, height: 630, alt: "DDTech — concepto de rediseño" }],
+    "@type": "Person",
+    "@id": `${SITE_URL}/artista#persona`,
+    name: artist.name,
+    jobTitle: "Pintor",
+    url: absolute("/artista"),
+  };
+}
+
+export function artworkLd(work: Artwork, artist: ArtistProfile) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "VisualArtwork",
+    name: work.title,
+    url: absolute(`/obras/${work.slug}`),
+    image: absolute(work.image.src),
+    creator: personLd(artist),
+    dateCreated: String(work.year),
+    artform: "Pintura",
+    artMedium: work.technique,
+    artworkSurface: work.support,
+    height: { "@type": "Distance", name: `${work.dimensions.height} cm` },
+    width: { "@type": "Distance", name: `${work.dimensions.width} cm` },
+    ...(work.dimensions.depth ? { depth: { "@type": "Distance", name: `${work.dimensions.depth} cm` } } : {}),
+    description: work.concept.split(/\n\s*\n/)[0],
+    genre: work.style,
+    identifier: work.inventoryNumber,
+  };
+}
+
+export function breadcrumbLd(items: { name: string; path: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((it, i) => ({ "@type": "ListItem", position: i + 1, name: it.name, item: absolute(it.path) })),
+  };
+}
+
+export function collectionLd(c: CollectionWithWorks) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: c.title,
+    description: c.description.split(/\n\s*\n/)[0],
+    url: absolute(`/colecciones/${c.slug}`),
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems: c.works.length,
+      itemListElement: c.works.map((w, i) => ({ "@type": "ListItem", position: i + 1, url: absolute(`/obras/${w.slug}`), name: w.title })),
     },
-    twitter: { card: "summary_large_image", title, description, images: [image ?? OG_IMAGE] },
   };
 }
